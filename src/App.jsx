@@ -13,7 +13,12 @@ import { issues } from './data/issues';
 
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
+
+  useEffect(() => {
+    document.body.classList.toggle('dark-mode', darkMode);
+  }, [darkMode]);
+  
   const [problemInput, setProblemInput] = useState('');
   const [generatedText, setGeneratedText] = useState(`*Problem:
 *Diagnosis: 
