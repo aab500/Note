@@ -1,0 +1,30 @@
+.active-btn {
+  background-color: green;
+  color: white;
+}
+.btn-group-toggle .btn {
+  margin-right: 5px;
+}
+.dark-mode {
+  background-color: #121212;
+  color: #ffff;
+}
+.dark-mode .form-control {
+  background-color: #1e1e1e;
+  color: #ffff;
+  border: 1px solid #ffff;
+}
+.dark-mode .modal-content {
+  background-color: #1e1e1e;
+  color: #ffff;
+}
+.container {
+  margin-top: 20px;
+}
+.large-textarea {
+  height: 150px;
+}
+.large-input {
+  width: 100%;
+  height: 150px;
+   }
