@@ -19,7 +19,6 @@ export const issueConfig = [
 
   { name: 'Battery', color: 'primary' },
   { name: 'Wifi', color: 'primary' },
-
   { name: 'OS', color: 'primary' },
   { name: 'Sensors', color: 'primary' },
   { name: 'Adapter', color: 'primary' },
