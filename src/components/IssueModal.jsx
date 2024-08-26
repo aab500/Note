@@ -24,7 +24,7 @@ function IssueModal({ currentIssue, setCurrentIssue, issues, handleSaveIssueDeta
 
   return (
     <div className="modal" style={{display: 'block'}}>
-      <div className="modal-dialog modal-lg">
+      <div className="modal-dialog modal-dialog-scrollable modal-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">Select Details and Recommendations for {currentIssue}</h5>
