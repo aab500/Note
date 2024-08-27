@@ -18,7 +18,7 @@ export const issueConfig = [
 
   [
     { name: 'Keyboard', color: 'primary' },
-    { name: 'Keyboard_WFC', color: 'primary' },
+    { name: 'Palmrest_with_KB', color: 'primary' },
     { name: 'TouchPad', color: 'primary' },
     { name: 'Plastics', color: 'info' },
     { name: 'Hinges', color: 'info' },
