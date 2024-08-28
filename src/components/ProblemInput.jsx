@@ -22,12 +22,12 @@ function ProblemInput({ problemInput, setProblemInput }) {
 
   return (
     <div className="form-group">
-      <label htmlFor="problemInput">Add to Problem:</label>
+      <label htmlFor="problemInput">Customer Ticket:</label>
       <textarea
         className="form-control large-textarea"
         id="problemInput"
         rows="3"
-        placeholder="Enter problem"
+        placeholder="Paste Customer Ticket here!"
         value={problemInput}
         onChange={handleProblemInputChange}
       />
