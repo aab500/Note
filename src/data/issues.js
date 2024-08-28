@@ -164,7 +164,7 @@ export const issues = {
       "Release sticky clicks",
     ],
   },
-  WebCam_MIC: {
+  WebCam_Mic: {
     details: [
       "DMG Front WebCam",
       "Front WebCam not working",
@@ -188,6 +188,7 @@ export const issues = {
       "Replace Palmrest Camera",
       "Repalce WebCam cable",
       "Reseat WebCam cable",
+      "Repalce LCD cable",
       "",
       "Replace WebCam w/Mic Board",
       "Replace Microphone Board",
