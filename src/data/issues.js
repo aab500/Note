@@ -59,6 +59,8 @@ export const issues = {
       "D/B AC port broken",
       "D/B Headset port loose",
       "D/B Headset port broken",
+      "",
+      "Possible DMG Customer Adapter",
     ],
     recommendations: [
       "Replace M/B",
@@ -68,6 +70,9 @@ export const issues = {
       "Replace D/B",
       "Reflow D/B Port/s",
       "(Reflow D/B port/s and return the new D/B . Or Replace D/B)",
+      "",
+      "Reflow DEF/DMG Ports",
+      "Add Adapter",
     ],
   },
 
@@ -256,8 +261,10 @@ export const issues = {
       "Loose cable",
       "Swollen issue",
       "Has Liquid spill",
+      "Discharged",
+      
     ],
-    recommendations: ["Replace Battery", "Reseat Battery cable"],
+    recommendations: ["Replace Battery", "Reseat Battery cable", "Recharge Battery", "Add Adapter"],
   },
   Liquid_Spill_Affected: {
     details: [
