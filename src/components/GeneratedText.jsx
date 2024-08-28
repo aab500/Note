@@ -8,7 +8,18 @@ function GeneratedText({ generatedText, setGeneratedText }) {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(generatedText);
+    navigator.clipboard.writeText(generatedText)
+      .then(() => {
+        // Text successfully copied
+        console.log('Text copied to clipboard');
+        // Refresh the page after a short delay
+        setTimeout(() => {
+          window.location.reload();
+        }, 100); // 100ms delay before refresh
+      })
+      .catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
   };
 
   const handleRefresh = () => {
