@@ -224,7 +224,7 @@ export const issues = {
       "Replace Bottom cover",
       "Replace Palmrest (Non-FC)",
       "Replace Palm-rest (WFC)",
-      "Replace Hinges SPINE Strip",
+      "Replace Hinges Trim cover/cap",
       "",
       "Repalce Camera Bezel",
       "Release Sticky Power Button plastic",
