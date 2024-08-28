@@ -13,7 +13,7 @@ export const issueConfig = [
     { name: 'LCD_NTS', color: 'primary' },
     { name: 'LCD_TouchScreen', color: 'primary' },
     { name: 'LCD_Cable', color: 'primary' },
-    { name: 'WebCam_MIC', color: 'primary' },
+    { name: 'WebCam_Mic', color: 'primary' },
   ],
 
   [
