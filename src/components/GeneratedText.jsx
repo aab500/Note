@@ -28,7 +28,7 @@ function GeneratedText({ generatedText, setGeneratedText }) {
 
   return (
     <div className="form-group">
-      <label htmlFor="generatedText">Generated Text:</label>
+      <label htmlFor="generatedText">Generated Note:</label>
       <textarea
         className="form-control large-textarea"
         id="generatedText"
