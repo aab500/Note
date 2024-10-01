@@ -105,6 +105,8 @@ function App() {
             setEnrollment={setEnrollment} 
             updateGeneratedText={updateGeneratedText} 
           />
+
+          {/* 
           <TestRadio 
             test={test} 
             setTest={setTest} 
@@ -112,6 +114,9 @@ function App() {
             generateDiagnosisText={generateDiagnosisText} 
             selectedIssues={selectedIssues} 
           />
+          */} 
+
+          
           <AccessoryButtons 
             accessories={accessories} 
             setAccessories={setAccessories} 
