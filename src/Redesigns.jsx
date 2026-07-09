@@ -609,16 +609,6 @@ function TaskFlow({ stepStates, darkMode, setDarkMode }) {
   return (
     <section className="task-flow" aria-labelledby="task-title">
       <div className="task-flow-top">
-        <button
-          type="button"
-          className={`theme-toggle ${darkMode ? 'is-dark' : 'is-light'}`}
-          onClick={() => setDarkMode(prev => !prev)}
-          aria-pressed={darkMode}
-          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          <span className={!darkMode ? 'is-active' : ''}>ON</span>
-          <span className={darkMode ? 'is-active' : ''}>OFF</span>
-        </button>
         <div className="task-flow-content">
           <div className="task-flow-copy">
             <p>Task Flow</p>
@@ -645,6 +635,16 @@ function TaskFlow({ stepStates, darkMode, setDarkMode }) {
             </div>
           </div>
         </div>
+        <button
+          type="button"
+          className={`theme-toggle ${darkMode ? 'is-dark' : 'is-light'}`}
+          onClick={() => setDarkMode(prev => !prev)}
+          aria-pressed={darkMode}
+          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          <span className={!darkMode ? 'is-active' : ''}>ON</span>
+          <span className={darkMode ? 'is-active' : ''}>OFF</span>
+        </button>
       </div>
     </section>
   );
