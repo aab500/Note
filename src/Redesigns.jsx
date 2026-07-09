@@ -90,7 +90,7 @@ function useRepairNoteState() {
   const [selectedIssues, setSelectedIssues] = useState({});
   const [currentIssue, setCurrentIssue] = useState(null);
   const [enrollment, setEnrollment] = useState('');
-  const [accessories, setAccessories] = useState(['None']);
+  const [accessories, setAccessories] = useState([]);
   const [status, setStatus] = useState({ tone: 'empty', text: 'Ready for ticket text.' });
   const [ticketError, setTicketError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -136,6 +136,14 @@ function useRepairNoteState() {
         next = ['None'];
       } else if (prev.includes('None')) {
         next = [accessory];
+      } else if (accessory === 'Complete Case') {
+        next = prev.includes(accessory)
+          ? prev.filter(item => item !== accessory)
+          : [...prev.filter(item => item !== 'Bottom Case' && item !== 'Back Case'), accessory];
+      } else if (accessory === 'Bottom Case' || accessory === 'Back Case') {
+        next = prev.includes(accessory)
+          ? prev.filter(item => item !== accessory)
+          : [...prev.filter(item => item !== 'Complete Case'), accessory];
       } else {
         next = prev.includes(accessory)
           ? prev.filter(item => item !== accessory)
@@ -184,7 +192,7 @@ function useRepairNoteState() {
     setSelectedIssues({});
     setCurrentIssue(null);
     setEnrollment('');
-    setAccessories(['None']);
+    setAccessories([]);
     setStatus({ tone: 'empty', text: 'Workspace reset.' });
     setTicketError('');
   };
@@ -311,21 +319,37 @@ function SegmentedControl({ label, value, options, onChange }) {
 }
 
 function AccessoryControl({ accessories, onToggle }) {
+  const hasCompleteCase = accessories.includes('Complete Case');
+  const hasSplitCase = accessories.includes('Bottom Case') || accessories.includes('Back Case');
+
   return (
     <fieldset className="accessory-grid">
       <legend>Accessories</legend>
-      {['None', 'ADP', 'Complete Case', 'Bottom Case', 'Back Case'].map(accessory => (
-        <label key={accessory} className={accessories.includes(accessory) ? 'is-selected' : ''}>
+      {['None', 'ADP', 'Complete Case', 'Bottom Case', 'Back Case', 'Stylus', 'USB Dongle'].map(accessory => {
+        const disabled =
+          (accessory === 'Complete Case' && hasSplitCase) ||
+          ((accessory === 'Bottom Case' || accessory === 'Back Case') && hasCompleteCase);
+
+        return (
+        <label
+          key={accessory}
+          className={[
+            accessories.includes(accessory) ? 'is-selected' : '',
+            disabled ? 'is-disabled' : '',
+          ].filter(Boolean).join(' ')}
+        >
           <input
             type="checkbox"
             name="accessories"
             value={accessory}
             checked={accessories.includes(accessory)}
+            disabled={disabled}
             onChange={() => onToggle(accessory)}
           />
           <span>{accessory}</span>
         </label>
-      ))}
+        );
+      })}
     </fieldset>
   );
 }
@@ -349,17 +373,25 @@ function SummaryTable({ selectedIssues }) {
             <caption>Selected repair issue details and recommendations</caption>
             <thead>
               <tr>
-                <th scope="col">Issue</th>
-                <th scope="col">Details</th>
+                <th scope="col">Issue and details</th>
                 <th scope="col">Recommendations</th>
               </tr>
             </thead>
             <tbody>
               {rows.map(([issue, values]) => (
                 <tr key={issue}>
-                  <th scope="row">{formatIssueName(issue)}</th>
-                  <td>{values.details.join(', ') || 'No details selected'}</td>
-                  <td>{values.recommendations.join(', ') || 'No recommendations selected'}</td>
+                  <td>
+                    <div className="summary-issue-cell">
+                      <strong>{formatIssueName(issue)}</strong>
+                      <span>{values.details.join(', ') || 'No details selected'}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="summary-recommendation-cell">
+                      <span className="summary-spacer" aria-hidden="true">{formatIssueName(issue)}</span>
+                      <span>{values.recommendations.join(', ') || 'No recommendations selected'}</span>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -370,7 +402,7 @@ function SummaryTable({ selectedIssues }) {
   );
 }
 
-function IssueModal({ issue, onClose, onSave }) {
+function IssueModal({ issue, savedIssue, onClose, onSave }) {
   const dialogRef = useRef(null);
   const closeRef = useRef(null);
   const detailOptions = useMemo(() => issues[issue].details.filter(Boolean), [issue]);
@@ -380,6 +412,9 @@ function IssueModal({ issue, onClose, onSave }) {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    setSelectedDetails(savedIssue?.details ?? []);
+    setSelectedRecommendations(savedIssue?.recommendations ?? []);
+    setError('');
     const previous = document.activeElement;
     closeRef.current?.focus();
     document.body.classList.add('modal-open');
@@ -405,7 +440,7 @@ function IssueModal({ issue, onClose, onSave }) {
       document.removeEventListener('keydown', handleKeyDown);
       previous?.focus?.();
     };
-  }, [onClose]);
+  }, [issue, onClose, savedIssue]);
 
   const toggle = (value, setter) => {
     setter(prev => prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value]);
@@ -494,16 +529,19 @@ function CheckboxColumn({ title, name, options, selected, onToggle }) {
 }
 
 function ProductLayout({ state, route }) {
-  const completed = [
-    state.problemInput.trim(),
-    Object.keys(state.selectedIssues).length,
-    state.enrollment,
-    state.accessories.length,
-  ].filter(Boolean).length;
+  const stepStates = [
+    Boolean(state.problemInput.trim()),
+    Object.keys(state.selectedIssues).length > 0,
+    Boolean(state.enrollment),
+    state.accessories.length > 0,
+  ];
 
   return (
     <main id="main-content" className="dashboard-shell">
       <a href="#main-content" className="skip-link">Skip to workspace</a>
+      <div className="page-rail">
+        <TaskFlow stepStates={stepStates} />
+      </div>
       <div className="top-grid">
         <section className="panel form-panel note-output" aria-labelledby="product-note-title">
           <div className="section-heading">
@@ -538,6 +576,7 @@ function ProductLayout({ state, route }) {
             value={state.problemInput}
             onChange={state.setProblemInput}
             error={state.ticketError}
+            rows={9}
             placeholder="Paste customer ticket text..."
             hint="Used to populate the Problem line"
           />
@@ -561,11 +600,7 @@ function ProductLayout({ state, route }) {
             <AccessoryControl accessories={state.accessories} onToggle={state.toggleAccessory} />
           </section>
         </div>
-        <aside className="right-stack" aria-label="Task dashboard and selected work">
-          <TaskFlow completed={completed} />
-          <div className="progress-meter" aria-label={`${completed} of 4 steps complete`}>
-            <span style={{ width: `${completed * 25}%` }} />
-          </div>
+        <aside className="right-stack" aria-label="Selected work">
           <SummaryTable selectedIssues={state.selectedIssues} />
         </aside>
       </div>
@@ -573,21 +608,33 @@ function ProductLayout({ state, route }) {
   );
 }
 
-function TaskFlow({ completed }) {
+function TaskFlow({ stepStates }) {
+  const steps = ['Paste ticket', 'Select issues', 'Confirm enrollment', 'Select Accessories'];
+
   return (
     <section className="task-flow" aria-labelledby="task-title">
-      <div className="section-heading">
+      <div className="section-heading task-flow-heading">
         <p>Task Flow</p>
         <h2 id="task-title">4 steps to a complete note</h2>
       </div>
-      <ol className="task-list">
-        {['Paste ticket', 'Select issues', 'Confirm enrollment', 'Copy note'].map((item, index) => (
-          <li key={item} className={completed > index ? 'is-done' : ''}>
-            <span>{index + 1}</span>
-            <strong>{item}</strong>
-          </li>
-        ))}
+      <ol className="task-stepper" aria-label="Task flow steps">
+        {steps.map((item, index) => {
+          const state = stepStates[index] ? 'is-done' : '';
+          return (
+            <li key={item} className={state}>
+              <span className="step-node" aria-hidden="true">
+                {stepStates[index] ? '\u2713' : index + 1}
+              </span>
+              <strong>{item}</strong>
+            </li>
+          );
+        })}
       </ol>
+      <div className="task-connector" aria-hidden="true">
+        {steps.slice(0, -1).map((_, index) => (
+          <span key={index} className={stepStates[index] ? 'is-done' : ''} />
+        ))}
+      </div>
     </section>
   );
 }
@@ -610,6 +657,7 @@ function RedesignApp() {
       {state.currentIssue && (
         <IssueModal
           issue={state.currentIssue}
+          savedIssue={state.selectedIssues[state.currentIssue]}
           onClose={() => state.setCurrentIssue(null)}
           onSave={state.saveIssueDetails}
         />

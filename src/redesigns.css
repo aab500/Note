@@ -170,6 +170,12 @@
   border-color: var(--accent-strong);
 }
 
+.note-actions .primary-action:hover:not(:disabled) {
+  background: #a7e9b8;
+  border-color: #a7e9b8;
+  color: #14351f;
+}
+
 .status-message {
   display: flex;
   min-height: 44px;
@@ -214,6 +220,12 @@
 .dashboard-shell {
   width: min(1080px, calc(100% - 2rem));
   margin: clamp(1.5rem, 5vw, 3rem) auto var(--space-7) clamp(1rem, 7vw, 8rem);
+}
+
+.page-rail {
+  display: grid;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
 }
 
 .top-grid,
@@ -280,6 +292,7 @@
 }
 
 .lower-grid {
+  align-items: stretch;
   grid-template-areas: "left right";
 }
 
@@ -289,6 +302,10 @@
 
 .right-stack {
   grid-area: right;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .panel,
@@ -390,6 +407,15 @@
   color: var(--accent-strong);
 }
 
+.accessory-grid label.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.accessory-grid label.is-disabled input {
+  cursor: not-allowed;
+}
+
 .segmented,
 .accessory-grid {
   display: grid;
@@ -436,11 +462,23 @@
 }
 
 .right-stack .summary-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100%;
+  min-width: 0;
   padding: var(--space-4);
 }
 
 .right-stack .summary-panel .section-heading {
   margin-bottom: var(--space-3);
+}
+
+.right-stack .summary-panel .empty-state,
+.right-stack .summary-panel .table-wrap {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
 }
 
 .empty-state {
@@ -458,14 +496,17 @@
 }
 
 .table-wrap {
-  overflow-x: auto;
-  border: 1px solid var(--border);
+  overflow: auto;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--border) 72%, white);
   border-radius: var(--radius);
 }
 
 table {
   width: 100%;
-  min-width: 42rem;
+  min-width: 0;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
@@ -483,6 +524,38 @@ td {
   padding: var(--space-3);
   text-align: left;
   vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.summary-issue-cell {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.summary-recommendation-cell {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.summary-spacer {
+  visibility: hidden;
+  user-select: none;
+}
+
+.summary-issue-cell strong {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.summary-issue-cell span {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.summary-recommendation-cell span:last-child {
+  color: var(--text);
+  overflow-wrap: anywhere;
 }
 
 thead th {
@@ -582,8 +655,13 @@ tbody tr:last-child td {
 }
 
 .issue-modal footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: var(--surface);
   border-top: 1px solid var(--border);
   justify-content: flex-end;
+  box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.04);
 }
 
 .theme-product {
@@ -601,21 +679,6 @@ tbody tr:last-child td {
   --shadow: 0 10px 28px rgba(20, 52, 84, 0.09);
 }
 
-.progress-meter {
-  height: 0.7rem;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--surface-soft);
-}
-
-.progress-meter span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--accent);
-  transition: width 180ms ease;
-}
-
 .left-stack .issue-panel {
   padding-bottom: var(--space-3);
 }
@@ -629,6 +692,7 @@ tbody tr:last-child td {
 }
 
 .task-flow {
+  position: relative;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
@@ -636,47 +700,103 @@ tbody tr:last-child td {
   box-shadow: var(--shadow);
 }
 
-.task-flow .section-heading {
-  margin-bottom: var(--space-3);
+.task-flow-heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
-.task-list {
+.task-stepper {
+  position: relative;
   display: grid;
-  gap: var(--space-2);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
+  z-index: 1;
 }
 
-.task-list li {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface-soft);
-  padding: var(--space-2) var(--space-3);
-}
-
-.task-list span {
+.task-stepper li {
   display: grid;
-  width: 2rem;
-  height: 2rem;
+  justify-items: center;
+  gap: var(--space-1);
+  text-align: center;
+  min-width: 0;
+  color: var(--muted);
+}
+
+.task-stepper strong {
+  display: block;
+  max-width: 100%;
+  font-size: 0.76rem;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.step-node {
+  display: grid;
+  width: 2.35rem;
+  height: 2.35rem;
   place-items: center;
   border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--border) 86%, white);
   background: var(--surface);
   color: var(--muted);
   font-weight: 800;
+  box-shadow: 0 0 0 2px var(--page);
 }
 
-.task-list li.is-done {
-  border-color: color-mix(in srgb, var(--success) 55%, var(--border));
-  background: color-mix(in srgb, var(--success) 10%, var(--surface));
+.task-stepper li.is-done {
+  color: var(--text);
 }
 
-.task-list li.is-done span {
+.task-stepper li.is-done .step-node {
+  border-color: var(--success);
   background: var(--success);
+  font-size: 0;
   color: white;
+}
+
+.task-stepper li.is-current .step-node {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--surface);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 10%, var(--page));
+}
+
+.task-stepper li.is-done .step-node::after {
+  content: '';
+  position: relative;
+  top: -0.06rem;
+  width: 0.5rem;
+  height: 0.26rem;
+  border-left: 3px solid currentColor;
+  border-bottom: 3px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.task-connector {
+  position: absolute;
+  inset: 1.95rem 1.18rem auto 1.18rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  height: 2px;
+  pointer-events: none;
+}
+
+.task-connector span {
+  display: block;
+  height: 100%;
+  background: var(--border);
+}
+
+.task-connector span.is-done {
+  background: var(--success);
 }
 
 @media (max-width: 1120px) {
@@ -725,6 +845,23 @@ tbody tr:last-child td {
   .toolbar {
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .task-stepper {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
+  .task-connector {
+    display: none;
+  }
+
+  .task-stepper li {
+    grid-template-columns: auto 1fr;
+    justify-items: start;
+    text-align: left;
+    align-items: center;
+    gap: var(--space-3);
   }
 
   .issue-group,
