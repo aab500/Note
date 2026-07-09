@@ -642,8 +642,7 @@ function TaskFlow({ stepStates, darkMode, setDarkMode }) {
           aria-pressed={darkMode}
           aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-          <span className={!darkMode ? 'is-active' : ''}>ON</span>
-          <span className={darkMode ? 'is-active' : ''}>OFF</span>
+          <span className="theme-icon" aria-hidden="true">{darkMode ? '\u2600' : '\u263E'}</span>
         </button>
       </div>
     </section>

@@ -219,11 +219,12 @@
 
 .dashboard-shell {
   width: min(1080px, calc(100% - 2rem));
-  margin: clamp(1.5rem, 5vw, 3rem) auto var(--space-7) clamp(1rem, 7vw, 8rem);
+  margin: clamp(1.5rem, 5vw, 3rem) auto var(--space-7);
 }
 
 .page-rail {
   display: grid;
+  justify-items: center;
   gap: var(--space-2);
   margin-bottom: var(--space-4);
 }
@@ -402,9 +403,18 @@
 .segmented label.is-selected,
 .accessory-grid label.is-selected,
 .checkbox-column label.is-selected {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 13%, var(--surface));
+  border-color: color-mix(in srgb, var(--accent) 78%, white);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 30%, var(--surface)) 0%, color-mix(in srgb, var(--accent) 18%, var(--surface)) 100%);
   color: var(--accent-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 10px 22px rgba(20, 28, 24, 0.16);
+  transform: translateY(-1px);
+}
+
+.issue-chip.is-selected:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 34%, var(--surface)) 0%, color-mix(in srgb, var(--accent) 22%, var(--surface)) 100%);
 }
 
 .accessory-grid label.is-disabled {
@@ -588,11 +598,12 @@ tbody tr:last-child td {
   width: min(60rem, 100%);
   max-height: min(46rem, calc(100vh - 2rem));
   overflow: auto;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border));
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 96%, white) 0%, var(--surface) 100%);
   color: var(--text);
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.22);
 }
 
 .issue-modal header,
@@ -601,11 +612,12 @@ tbody tr:last-child td {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  padding: var(--space-5);
+  padding: var(--space-4) var(--space-5);
 }
 
 .issue-modal header {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 76%, white);
+  background: color-mix(in srgb, var(--surface-soft) 55%, var(--surface));
 }
 
 .issue-modal header p {
@@ -631,7 +643,7 @@ tbody tr:last-child td {
 .modal-columns {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-5);
+  gap: var(--space-4);
   padding: var(--space-5);
 }
 
@@ -643,7 +655,35 @@ tbody tr:last-child td {
 }
 
 .checkbox-column label {
-  align-items: flex-start;
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+}
+
+.checkbox-column label.is-selected {
+  border-color: color-mix(in srgb, var(--accent) 78%, white);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 28%, var(--surface)) 0%, color-mix(in srgb, var(--accent) 15%, var(--surface)) 100%);
+  color: var(--accent-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 8px 18px rgba(20, 28, 24, 0.12);
+}
+
+.checkbox-column label.is-selected:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.checkbox-column input {
+  width: 1.05rem;
+  height: 1.05rem;
+  accent-color: var(--accent);
+  flex: 0 0 auto;
 }
 
 .empty-inline {
@@ -658,8 +698,8 @@ tbody tr:last-child td {
   position: sticky;
   bottom: 0;
   z-index: 2;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 92%, white);
+  border-top: 1px solid color-mix(in srgb, var(--border) 76%, white);
   justify-content: flex-end;
   box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.04);
 }
@@ -841,80 +881,58 @@ tbody tr:last-child td {
   margin: 0;
   align-self: start;
   justify-self: end;
+  position: relative;
   display: grid;
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  width: 4.8rem;
-  height: 7.4rem;
-  padding: 0.16rem;
-  border: 1px solid color-mix(in srgb, #7d7d7d 78%, white);
-  border-radius: 0.8rem;
-  background:
-    linear-gradient(180deg, #9d9d9d 0%, #6e6e6e 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.22),
-    0 2px 0 rgba(0, 0, 0, 0.18);
-  color: var(--text);
-  font-weight: 750;
-  overflow: hidden;
+  place-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
 }
 
 .theme-toggle:hover:not(:disabled) {
   transform: translateY(-1px);
 }
 
-.theme-toggle span {
-  display: grid;
-  place-items: center;
-  border-radius: 0.5rem;
-  font-size: 0.8rem;
-  font-weight: 900;
-  letter-spacing: 0;
-  text-transform: uppercase;
+.theme-toggle::before {
+  content: none;
+}
+
+.theme-icon {
+  position: relative;
+  font-family: "Segoe UI Symbol", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 1.45rem;
+  line-height: 1;
+  color: var(--text);
   user-select: none;
-  transition: background-color 160ms ease, color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
 
-.theme-toggle span:first-child {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+.theme-toggle.is-dark {
+  background: transparent;
 }
 
-.theme-toggle span:last-child {
-  border-top: 1px solid rgba(255, 255, 255, 0.36);
+.theme-toggle.is-dark::before {
+  content: none;
 }
 
-.theme-toggle span.is-active {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+.theme-toggle.is-light {
+  background: transparent;
 }
 
-.theme-toggle.is-dark span:first-child {
-  background: linear-gradient(180deg, #f0f0f0 0%, #e1e1e1 100%);
-  color: #3a3a3a;
+.theme-toggle.is-light::before {
+  content: none;
 }
 
-.theme-toggle.is-dark span:last-child {
-  background: linear-gradient(180deg, #f8f8f8 0%, #ededed 100%);
-  color: #22a95c;
+.theme-toggle.is-dark .theme-icon {
+  color: #fff;
 }
 
-.theme-toggle.is-dark span:first-child.is-active {
-  background: linear-gradient(180deg, #f4f4f4 0%, #dadada 100%);
-}
-
-.theme-toggle.is-light span:first-child {
-  background: linear-gradient(180deg, #f0f0f0 0%, #e1e1e1 100%);
-  color: #22a95c;
-}
-
-.theme-toggle.is-light span:last-child {
-  background: linear-gradient(180deg, #f8f8f8 0%, #f2f2f2 100%);
-  color: #3a3a3a;
-}
-
-.theme-toggle.is-light span:last-child.is-active {
-  background: linear-gradient(180deg, #fcfcfc 0%, #eaeaea 100%);
+.theme-toggle.is-light .theme-icon {
+  color: #111;
 }
 
 .sample-app.is-dark {
@@ -929,6 +947,93 @@ tbody tr:last-child td {
   --accent-strong: #4f87ba;
   --success: #5ea87a;
   --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+}
+
+.sample-app.is-dark button {
+  background: linear-gradient(180deg, #202b3a 0%, #151c28 100%);
+  border-color: #3a4b63;
+  color: #f4f8ff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+    0 8px 18px rgba(0, 0, 0, 0.24);
+}
+
+.sample-app.is-dark button:hover:not(:disabled) {
+  border-color: #59708f;
+  background: linear-gradient(180deg, #263345 0%, #18202d 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.32),
+    0 10px 22px rgba(0, 0, 0, 0.3);
+}
+
+.sample-app.is-dark .primary-action {
+  background: linear-gradient(180deg, #2f7bd6 0%, #215aa2 100%);
+  border-color: #4f86d2;
+  color: #ffffff;
+}
+
+.sample-app.is-dark .primary-action:hover:not(:disabled) {
+  background: linear-gradient(180deg, #3a89e8 0%, #2766b6 100%);
+  border-color: #6a98dd;
+}
+
+.sample-app.is-dark .toolbar button,
+.sample-app.is-dark .panel-actions button,
+.sample-app.is-dark .issue-modal footer button {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+    0 8px 18px rgba(0, 0, 0, 0.24);
+}
+
+.sample-app.is-dark .issue-chip.is-selected {
+  border-color: color-mix(in srgb, var(--accent) 82%, white);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 34%, #1a2433) 0%, color-mix(in srgb, var(--accent) 18%, #101822) 100%);
+  color: #f3f8ff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.sample-app.is-dark .issue-chip.is-selected:hover:not(:disabled) {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 42%, #1a2433) 0%, color-mix(in srgb, var(--accent) 24%, #101822) 100%);
+}
+
+.sample-app.is-dark .segmented label.is-selected,
+.sample-app.is-dark .accessory-grid label.is-selected,
+.sample-app.is-dark .checkbox-column label.is-selected {
+  border-color: color-mix(in srgb, var(--accent) 80%, white);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 30%, #1a2433) 0%, color-mix(in srgb, var(--accent) 18%, #101822) 100%);
+  color: #f3f8ff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.sample-app.is-dark .segmented label.is-selected:hover,
+.sample-app.is-dark .accessory-grid label.is-selected:hover,
+.sample-app.is-dark .checkbox-column label.is-selected:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--accent) 92%, white);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 40%, #1a2433) 0%, color-mix(in srgb, var(--accent) 24%, #101822) 100%);
+}
+
+.sample-app.is-dark .issue-modal {
+  border-color: color-mix(in srgb, var(--accent) 16%, var(--border));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 88%, white) 0%, var(--surface) 100%);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.36);
+}
+
+.sample-app.is-dark .issue-modal header {
+  background: color-mix(in srgb, var(--surface-soft) 62%, var(--surface));
+  border-bottom-color: color-mix(in srgb, var(--border) 72%, white);
+}
+
+.sample-app.is-dark .issue-modal footer {
+  background: color-mix(in srgb, var(--surface) 88%, white);
+  border-top-color: color-mix(in srgb, var(--border) 72%, white);
 }
 
 .sample-app.is-dark .theme-toggle {
