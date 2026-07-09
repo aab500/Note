@@ -693,20 +693,59 @@ tbody tr:last-child td {
 
 .task-flow {
   position: relative;
-  border: 1px solid var(--border);
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--border) 92%, white);
   border-radius: var(--radius);
   background: var(--surface);
-  padding: var(--space-4);
-  box-shadow: var(--shadow);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: 0 10px 28px rgba(20, 52, 84, 0.06);
 }
 
-.task-flow-heading {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
+.task-flow-top {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-3);
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.task-flow-content {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.task-flow-copy {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  min-width: 0;
   white-space: nowrap;
+}
+
+.task-flow-copy p {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.task-flow-copy h2 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.task-flow-track {
+  position: relative;
+  min-width: 0;
+  padding-top: 0.15rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 70%, white);
 }
 
 .task-stepper {
@@ -715,7 +754,7 @@ tbody tr:last-child td {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
   margin: 0;
-  padding: 0;
+  padding: 0.55rem 0.2rem 0;
   list-style: none;
   z-index: 1;
 }
@@ -781,7 +820,7 @@ tbody tr:last-child td {
 
 .task-connector {
   position: absolute;
-  inset: 1.95rem 1.18rem auto 1.18rem;
+  inset: 3.15rem 1.35rem auto 1.35rem;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0;
@@ -797,6 +836,108 @@ tbody tr:last-child td {
 
 .task-connector span.is-done {
   background: var(--success);
+}
+
+.theme-toggle {
+  margin: 0;
+  align-self: start;
+  display: grid;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  width: 4.8rem;
+  height: 7.4rem;
+  padding: 0.16rem;
+  border: 1px solid color-mix(in srgb, #7d7d7d 78%, white);
+  border-radius: 0.8rem;
+  background:
+    linear-gradient(180deg, #9d9d9d 0%, #6e6e6e 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.22),
+    0 2px 0 rgba(0, 0, 0, 0.18);
+  color: var(--text);
+  font-weight: 750;
+  overflow: hidden;
+}
+
+.theme-toggle:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.theme-toggle span {
+  display: grid;
+  place-items: center;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  user-select: none;
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.theme-toggle span:first-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.theme-toggle span:last-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.36);
+}
+
+.theme-toggle span.is-active {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.theme-toggle.is-dark span:first-child {
+  background: linear-gradient(180deg, #f0f0f0 0%, #e1e1e1 100%);
+  color: #3a3a3a;
+}
+
+.theme-toggle.is-dark span:last-child {
+  background: linear-gradient(180deg, #f8f8f8 0%, #ededed 100%);
+  color: #22a95c;
+}
+
+.theme-toggle.is-dark span:first-child.is-active {
+  background: linear-gradient(180deg, #f4f4f4 0%, #dadada 100%);
+}
+
+.theme-toggle.is-light span:first-child {
+  background: linear-gradient(180deg, #f0f0f0 0%, #e1e1e1 100%);
+  color: #22a95c;
+}
+
+.theme-toggle.is-light span:last-child {
+  background: linear-gradient(180deg, #f8f8f8 0%, #f2f2f2 100%);
+  color: #3a3a3a;
+}
+
+.theme-toggle.is-light span:last-child.is-active {
+  background: linear-gradient(180deg, #fcfcfc 0%, #eaeaea 100%);
+}
+
+.sample-app.is-dark {
+  color-scheme: dark;
+  --page: #0c1117;
+  --surface: #131a23;
+  --surface-soft: #18212d;
+  --text: #ecf2fb;
+  --muted: #9aa8bb;
+  --border: #283446;
+  --accent: #77a8d1;
+  --accent-strong: #4f87ba;
+  --success: #5ea87a;
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+}
+
+.sample-app.is-dark .theme-toggle {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.sample-app.is-dark .task-flow {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.26);
 }
 
 @media (max-width: 1120px) {

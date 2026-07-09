@@ -270,10 +270,9 @@ function Toolbar({ state, route }) {
 
 function IssuePicker({ selectedIssues, setCurrentIssue }) {
   return (
-    <section className="panel issue-panel" aria-labelledby="issue-picker-title">
+    <section className="panel issue-panel" aria-label="Issue Library">
       <div className="section-heading">
         <p>Issue Library</p>
-        <h2 id="issue-picker-title">Choose the repair area</h2>
       </div>
       <div className="issue-groups">
         {issueGroups.map((group, index) => (
@@ -357,10 +356,9 @@ function AccessoryControl({ accessories, onToggle }) {
 function SummaryTable({ selectedIssues }) {
   const rows = Object.entries(selectedIssues);
   return (
-    <section className="panel summary-panel" aria-labelledby="summary-title">
+    <section className="panel summary-panel" aria-label="Selected Work">
       <div className="section-heading">
         <p>Selected Work</p>
-        <h2 id="summary-title">Issue summary</h2>
       </div>
       {rows.length === 0 ? (
         <div className="empty-state">
@@ -540,13 +538,12 @@ function ProductLayout({ state, route }) {
     <main id="main-content" className="dashboard-shell">
       <a href="#main-content" className="skip-link">Skip to workspace</a>
       <div className="page-rail">
-        <TaskFlow stepStates={stepStates} />
+        <TaskFlow stepStates={stepStates} darkMode={route.darkMode} setDarkMode={route.setDarkMode} />
       </div>
       <div className="top-grid">
-        <section className="panel form-panel note-output" aria-labelledby="product-note-title">
+        <section className="panel form-panel note-output" aria-label="Generated Note">
           <div className="section-heading">
             <p>Editable Output</p>
-            <h2 id="product-note-title">Generated Note</h2>
           </div>
           <TextareaField
             id="note-product"
@@ -565,10 +562,9 @@ function ProductLayout({ state, route }) {
             </button>
           </div>
         </section>
-        <section className="panel form-panel ticket-panel" aria-labelledby="product-ticket-title">
+        <section className="panel form-panel ticket-panel" aria-label="Customer Ticket">
           <div className="section-heading">
             <p>Input</p>
-            <h2 id="product-ticket-title">Customer Ticket</h2>
           </div>
           <TextareaField
             id="ticket-product"
@@ -591,10 +587,9 @@ function ProductLayout({ state, route }) {
       <div className="lower-grid">
         <div className="left-stack">
           <IssuePicker selectedIssues={state.selectedIssues} setCurrentIssue={state.setCurrentIssue} />
-          <section className="panel controls-panel" aria-labelledby="controls-title">
+          <section className="panel controls-panel" aria-label="Enrollment and accessories">
             <div className="section-heading">
               <p>Required Fields</p>
-              <h2 id="controls-title">Enrollment and accessories</h2>
             </div>
             <SegmentedControl label="Enrollment" value={state.enrollment} options={['Enrolled', 'Not Enrolled', 'Unknown']} onChange={state.setEnrollmentValue} />
             <AccessoryControl accessories={state.accessories} onToggle={state.toggleAccessory} />
@@ -608,32 +603,48 @@ function ProductLayout({ state, route }) {
   );
 }
 
-function TaskFlow({ stepStates }) {
+function TaskFlow({ stepStates, darkMode, setDarkMode }) {
   const steps = ['Paste ticket', 'Select issues', 'Confirm enrollment', 'Select Accessories'];
 
   return (
     <section className="task-flow" aria-labelledby="task-title">
-      <div className="section-heading task-flow-heading">
-        <p>Task Flow</p>
-        <h2 id="task-title">4 steps to a complete note</h2>
-      </div>
-      <ol className="task-stepper" aria-label="Task flow steps">
-        {steps.map((item, index) => {
-          const state = stepStates[index] ? 'is-done' : '';
-          return (
-            <li key={item} className={state}>
-              <span className="step-node" aria-hidden="true">
-                {stepStates[index] ? '\u2713' : index + 1}
-              </span>
-              <strong>{item}</strong>
-            </li>
-          );
-        })}
-      </ol>
-      <div className="task-connector" aria-hidden="true">
-        {steps.slice(0, -1).map((_, index) => (
-          <span key={index} className={stepStates[index] ? 'is-done' : ''} />
-        ))}
+      <div className="task-flow-top">
+        <button
+          type="button"
+          className={`theme-toggle ${darkMode ? 'is-dark' : 'is-light'}`}
+          onClick={() => setDarkMode(prev => !prev)}
+          aria-pressed={darkMode}
+          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          <span className={!darkMode ? 'is-active' : ''}>ON</span>
+          <span className={darkMode ? 'is-active' : ''}>OFF</span>
+        </button>
+        <div className="task-flow-content">
+          <div className="task-flow-copy">
+            <p>Task Flow</p>
+            <h2 id="task-title">4 steps to a complete note</h2>
+          </div>
+          <div className="task-flow-track">
+            <ol className="task-stepper" aria-label="Task flow steps">
+              {steps.map((item, index) => {
+                const state = stepStates[index] ? 'is-done' : '';
+                return (
+                  <li key={item} className={state}>
+                    <span className="step-node" aria-hidden="true">
+                      {stepStates[index] ? String.fromCharCode(10003) : index + 1}
+                    </span>
+                    <strong>{item}</strong>
+                  </li>
+                );
+              })}
+            </ol>
+            <div className="task-connector" aria-hidden="true">
+              {steps.slice(0, -1).map((_, index) => (
+                <span key={index} className={stepStates[index] ? 'is-done' : ''} />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -642,9 +653,9 @@ function TaskFlow({ stepStates }) {
 function RedesignApp() {
   const route = productRoute;
   const state = useRepairNoteState();
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    document.body.classList.remove('dark-mode');
     document.documentElement.dataset.sampleTheme = 'product';
     return () => {
       delete document.documentElement.dataset.sampleTheme;
@@ -652,8 +663,8 @@ function RedesignApp() {
   }, []);
 
   return (
-    <div className={`sample-app ${route.themeClass}`}>
-      <ProductLayout state={state} route={route} />
+    <div className={`sample-app ${route.themeClass} ${darkMode ? 'is-dark' : ''}`}>
+      <ProductLayout state={state} route={{ ...route, darkMode, setDarkMode }} />
       {state.currentIssue && (
         <IssueModal
           issue={state.currentIssue}
