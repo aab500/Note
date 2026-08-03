@@ -127,11 +127,3 @@ Contributions, bug reports, and feature requests are welcome! Feel free to open 
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
----
-
-## 📜 License
-
-Copyright © 2026 Tech404x. All Rights Reserved.
-
-This software and its source code are proprietary. Unauthorized copying, modification, distribution, or public display of this code via any medium is strictly prohibited.
