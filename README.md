@@ -5,7 +5,7 @@
 [![React](https://img.shields.io/badge/React-18-blue.svg?logo=react)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-4.2-646CFF.svg?logo=vite)](https://vitejs.dev/)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-4.5-7952B3.svg?logo=bootstrap)](https://getbootstrap.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](#license)
 
 **Note Taker** is a web application designed for hardware repair technicians, IT support teams, and warranty service centers. It automates the generation of standardized repair notes, ticket diagnoses, and repair recommendations for laptops, Chromebooks, and desktop hardware.
 
@@ -132,4 +132,6 @@ Contributions, bug reports, and feature requests are welcome! Feel free to open 
 
 ## 📜 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Copyright © 2026 Tech404x. All Rights Reserved.
+
+This software and its source code are proprietary. Unauthorized copying, modification, distribution, or public display of this code via any medium is strictly prohibited.
